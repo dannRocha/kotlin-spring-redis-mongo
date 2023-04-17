@@ -5,8 +5,16 @@ import com.br.turdus.repository.UserRepository
 import com.br.turdus.usecase.user.CreateUser
 
 class CreateUserImpl(
-//        @Qualifier(UserDIVersion.REPOSITORY_USER_IN_MEMORY_v1) private val repository: UserRepository
     private val repository: UserRepository
 ) : CreateUser {
-    override fun execute(user: User): User = repository.createUser(user)
+    override fun execute(user: User): User {
+
+        var userExists = repository.findByEmail(user.email)
+
+        userExists?.run {
+            throw RuntimeException()
+        }
+
+        return repository.insert(user)
+    }
 }

@@ -27,5 +27,5 @@ class UserController(
     fun getUsers(): ResponseEntity<List<UserDetailsDTO>> =
         ResponseEntity.ok(findAllUsers.execute().map { it.DTO })
 
-    
+
 }

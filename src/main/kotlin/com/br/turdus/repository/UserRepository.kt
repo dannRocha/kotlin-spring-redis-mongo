@@ -1,8 +1,10 @@
 package com.br.turdus.repository
 
 import com.br.turdus.core.domain.User
+import java.util.Optional
 
 interface UserRepository {
-    fun findAllUsers(): List<User>
-    fun createUser(user: User): User
+    fun findAll(): List<User>
+    fun insert(user: User): User
+    fun findByEmail(email: String): User?
 }

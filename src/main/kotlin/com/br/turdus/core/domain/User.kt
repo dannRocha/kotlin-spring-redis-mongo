@@ -1,10 +1,13 @@
 package com.br.turdus.core.domain
 
 import com.br.turdus.core.dto.user.UserDetailsDTO
+import org.springframework.data.annotation.Id
+import org.springframework.data.mongodb.core.mapping.Document
 import java.util.UUID
 
+@Document
 data class User(
-    val id: UUID,
+    @Id val id: UUID,
     val username: String,
     val password: String,
     val email: String

@@ -8,7 +8,8 @@ import com.br.turdus.cqr.publisher.user.UserRegisterPublisher
 import com.br.turdus.cqr.subscriber.Subscriber
 import com.br.turdus.cqr.subscriber.user.UserRegisterSubscriber
 import com.br.turdus.repository.UserRepository
-import com.br.turdus.repository.user.UserRepositoryInMemory
+import com.br.turdus.repository.user.inmemory.UserRepositoryInMemory
+import com.br.turdus.repository.user.mongo.UserRepositoryMongoDB
 import com.br.turdus.usecase.user.CreateUser
 import com.br.turdus.usecase.user.FindAllUsers
 import com.br.turdus.usecase.user.impl.v1.CreateUserImpl
@@ -16,7 +17,6 @@ import com.br.turdus.usecase.user.impl.v1.FindAllUsersImpl
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Primary
 
 object UserDIImpl {
     object V1 {
@@ -33,10 +33,12 @@ object UserDIImpl {
 
 @Configuration
 class UserDI(
-    private val applicationEventPublisher : ApplicationEventPublisher
+    private val applicationEventPublisher : ApplicationEventPublisher,
+    private val userRepositoryMongoDB : UserRepositoryMongoDB,
+
 ) {
 
-    private val userRepositoryImMemory: UserRepository = UserRepositoryInMemory();
+    private val userRepository: UserRepository = userRepositoryMongoDB;
 
 
     @Bean(UserDIImpl.V1.SUBSCRIBER_REGISTER_DI)
@@ -53,17 +55,22 @@ class UserDI(
 
     @Bean(UserDIImpl.V1.USE_CASE_CREATE_USER_DI)
     fun createUserUserCase(): CreateUser {
-        return CreateUserImpl(userRepositoryImMemory)
+        return CreateUserImpl(userRepository)
     }
 
 
     @Bean(UserDIImpl.V1.USE_CASE_FIND_ALL_USERS)
     fun findAllUser(): FindAllUsers {
-        return FindAllUsersImpl(userRepositoryImMemory)
+        return FindAllUsersImpl(userRepository)
     }
 
     @Bean(UserDIImpl.V1.REPOSITORY_USER_IN_MEMORY)
     fun userRepository(): UserRepository {
-        return userRepositoryImMemory
+        return userRepository
+    }
+
+    @Bean(UserDIImpl.V1.REPOSITORY_USER_DI)
+    fun userRepositoryMongoDB(): UserRepository {
+        return userRepositoryMongoDB
     }
 }
