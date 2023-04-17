@@ -5,6 +5,7 @@ import org.springframework.scheduling.annotation.Async
 import org.springframework.scheduling.annotation.EnableAsync
 
 interface Subscriber<T> {
+    @EventListener
     fun execute(event: T)
 
 }

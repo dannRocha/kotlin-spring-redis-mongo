@@ -9,7 +9,6 @@ class UserRegisterSubscriber(
     private val createUser: CreateUser
 ) : Subscriber<UserRegisterEvent> {
 
-
     override fun execute(event: UserRegisterEvent) {
         createUser.execute(event.Domain)
     }

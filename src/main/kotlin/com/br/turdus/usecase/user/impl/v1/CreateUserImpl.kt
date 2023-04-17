@@ -11,7 +11,7 @@ class CreateUserImpl(
 
         var userExists = repository.findByEmail(user.email)
 
-        userExists?.run {
+        if(userExists != null) {
             throw RuntimeException()
         }
 
